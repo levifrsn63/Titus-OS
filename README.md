@@ -22,7 +22,7 @@ Turn it on and select/attack!
 
 You can also connect to web ui (change credentials in code)
 
-wifi= Kupalka pw= password
+wifi= titus x01 pw= titusrocks
 
 Requirements
 SSD1306
@@ -33,9 +33,9 @@ BW16 Kit
 
 Connections
 Buttons
-Up Button: PA27
-Down Button: PA12
-Select Button: PA13
+BTN_UP: PA30
+BTN_DOWN: PA14
+BTN_OK: PA12
 SSD1306 128x64 .96inch Display
 SDA: PA26
 SCL: PA25
