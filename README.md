@@ -1,8 +1,8 @@
 # Titus OS
 
-RTL8720DN Deauther
+**RTL8720DN Deauther**
 
-Acknowledgement
+**Acknowledgement**
 This project makes use of code from the following repositories. I acknowledge and appreciate the contributions of the original authors.
 
 Cypher-5G-Deauther by dkyazzentwatwa
@@ -12,7 +12,7 @@ I have used portions of their code in my work, and I highly recommend checking o
 
 If you use this project and build upon it, please consider crediting these sources as well. Thank you to the original developers for their hard work and contributions to the community!
 
-How to Upload Firmware / Usage
+**How to Upload Firmware / Usage**
 Download the Adafruit_BusIO, Adafruit_GFX_Library, & Adafruit_SSD1306. You need to first backup any files that will be replaced, and then add this into your Arduino/libraries folder.
 
 This fixes bugs that make Adafruit SSD1306 library incompatible with BW16 board.
@@ -24,7 +24,7 @@ You can also connect to web ui (change credentials in code)
 
 wifi= titus x01 pw= titusrocks
 
-Requirements
+**Requirements**
 SSD1306
 
 3 Buttons
