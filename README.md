@@ -52,3 +52,10 @@ BTN_OK: PA12
 SSD1306 128x64 .96inch Display
 SDA: PA26
 SCL: PA25
+
+## Todo:
+
+ - [ ] Add WebUI Functionality
+ - [ ] Minimalistic themed UI
+ - [ ] Select multiple AP's
+ - [ ] Remote Access (WebUI)
