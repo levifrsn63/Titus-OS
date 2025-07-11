@@ -1,18 +1,7 @@
 # Titus OS
 
 
-**RTL8720DN Deauther**
-
-
-**Acknowledgement**
-This project makes use of code from the following repositories. I acknowledge and appreciate the contributions of the original authors.
-
-Cypher-5G-Deauther by dkyazzentwatwa
-RTL8720dn-Deauther by tesa-klebeband
-NovaX-5G-RTL8720dn-Bw16-Deauther by warwick320
-I have used portions of their code in my work, and I highly recommend checking out their projects for further insights.
-
-If you use this project and build upon it, please consider crediting these sources as well. Thank you to the original developers for their hard work and contributions to the community!
+**RTL8720DN DEAUTHER**
 
 
 
