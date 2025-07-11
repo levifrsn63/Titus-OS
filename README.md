@@ -1,7 +1,8 @@
-# Titus OS
+# Titus OS                            
 
 
-**RTL8720DN DEAUTHER**
+> **RTL8720DN DEAUTHER**
+
 
 
 
@@ -15,20 +16,36 @@ Turn it on and select/attack!
 
 You can also connect to web ui (change credentials in code)
 
-wifi= titus x01 pw= titusrocks
+**
+
+## Credentials
 
 
 
-**Requirements**
+wifi= titus os
+ pw= titusrocks
+
+
+**
+
+
+
+## **Requirements**
 
 SSD1306
 
-3 Buttons
+3 - 4 Buttons
 
 BW16 Kit
 
-Connections
-Buttons
+Arduino IDE
+
+**
+
+## Connections
+
+
+**Buttons**
 BTN_UP: PA30
 BTN_DOWN: PA14
 BTN_OK: PA12
