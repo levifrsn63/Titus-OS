@@ -1,6 +1,3 @@
-// Oled code made by warwick320 // updated by Cypher --> github.com/dkyazzentwatwa/cypher-5G-deauther
-// Updated again by Nickguitar --> github.com/Nickguitar/cypher-5G-deauther
-
 // Global flag to indicate that the sniff callback has been triggered.
 volatile bool sniffCallbackTriggered = false;
 
