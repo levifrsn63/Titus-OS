@@ -10,7 +10,9 @@ volatile bool sniffCallbackTriggered = false;
 #include "WiFiServer.h"
 #include "WiFiClient.h"
 #include "wifi_constants.h"
-
+#include "debug.h"
+#include "vector"
+#include "map"
 // Misc
 #undef max
 #undef min
@@ -33,10 +35,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define BTN_UP PA30
 #define BTN_DOWN PA14
 #define BTN_OK PA12
-
+#define BTN_BACK PA7
 
 #define TOTAL_MENU_ITEMS 6
-const char* mainMenuItems[TOTAL_MENU_ITEMS] = { "Attack", "Scan", "Select", "Sniff", "Deauth+Sniff", "WebUI"};
+const char* mainMenuItems[TOTAL_MENU_ITEMS] = { "- Attack", "- Scan", "- Select", "- Sniff", "- Deauth+Sniff", "- WebUI"};
 
 // Animation frames for spinner.
 const char spinnerChars[] = { '/', '-', '\\', '|' };
@@ -112,6 +114,8 @@ struct ManagementData {
 
 ManagementData capturedManagement;
 
+
+
 // Webserver
 #include "webserver.h"
 
@@ -122,6 +126,56 @@ void resetCaptureData() {
   capturedManagement.frameCount = 0;
   memset(capturedManagement.frames, 0, sizeof(capturedManagement.frames));
 }
+
+//WEBUI
+
+void displayWebUIInfo() {
+  display.clearDisplay();
+
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+
+  display.setCursor(0, 0);
+  display.println("SSID: Titus OS");
+
+  display.setCursor(0, 10);
+  display.println("Password: 0123456789");
+
+  display.setCursor(0, 20);
+  display.println("Access: XXX.XXX.XXX");
+
+  display.setCursor(0, 40);
+  display.println("COMING SOON");
+
+  display.setCursor(0, 54);  // Bottom line
+  display.println("Hold OK to stop");
+
+  display.display();
+
+  // Wait until OK is held
+  while (digitalRead(BTN_OK) == HIGH); // Wait for release (if held from before)
+
+  unsigned long pressStart = 0;
+  while (true) {
+    if (digitalRead(BTN_OK) == LOW) {
+      if (pressStart == 0) pressStart = millis();
+      if (millis() - pressStart > 400) {
+        // Show fast exit message
+        display.clearDisplay();
+        display.setCursor(0, 28);
+        display.println("Returning to menu...");
+        display.display();
+        delay(300);  // Fast exit
+        display.clearDisplay();
+        display.display();
+        break;
+      }
+    } else {
+      pressStart = 0;  // Reset if button released too soon
+    }
+  }
+}
+
 
 
 // Credentials for you Wifi network
@@ -313,8 +367,7 @@ void Becaon() {
 
 // Custom UI elements
 void drawFrame() {
-  display.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
-  display.drawRect(2, 2, SCREEN_WIDTH - 4, SCREEN_HEIGHT - 4, WHITE);
+   display.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
 }
 
 void drawProgressBar(int x, int y, int width, int height, int progress) {
@@ -697,6 +750,8 @@ void setup() {
   pinMode(BTN_DOWN, INPUT_PULLUP);
   pinMode(BTN_UP, INPUT_PULLUP);
   pinMode(BTN_OK, INPUT_PULLUP);
+  pinMode(BTN_BACK, INPUT_PULLUP);  
+
 
   Serial.begin(115200);
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
@@ -1445,52 +1500,57 @@ void loop() {
   // Always draw the main menu.
   drawMainMenu();
 
-  // Check if the OK (select) button was pressed.
-  if (digitalRead(BTN_OK) == LOW) {
-    if (currentTime - lastOkTime > DEBOUNCE_DELAY) {
-      // Decide what to do based on the currently visible item.
-      int actualIndex = selectedIndex + menuOffset;  // Map visible index to full array index.
-      if (actualIndex == 0) {
-        // "Attack" option
-        attackLoop();
-      } else if (actualIndex == 1) {
-        // "Scan" option
-        display.clearDisplay();
-        drawScanScreen();
-        if (scanNetworks() == 0) {
-          drawStatusBar("SCAN COMPLETE");
-          display.display();
-          delay(1000);
-        }
-      } else if (actualIndex == 2) {
-        // "Select" option
-        networkSelectionLoop();
-      } else if (actualIndex == 3) {
-        // "Sniff" option
-        startSniffing();
-      } else if (actualIndex == 4) { 
-          deauthAndSniff();
-          /*
-            // Check if the selected network (SelectedSSID) is available on both bands
-            bool found24 = false, found5 = false;
-            for (size_t i = 0; i < scan_results.size(); i++) {
-              if (scan_results[i].ssid == SelectedSSID) {
-                if (scan_results[i].channel < 36)
-                  found24 = true;
-                else
-                  found5 = true;
-              }
-            }
-            if (found24 && found5) {
-              dualAttackAndSniff(SelectedSSID);
-            } else {
-              // Fall back to the original single frequency attack
-              deauthAndSniff();
-            }*/
+// Check if the OK (select) button was pressed.
+if (digitalRead(BTN_OK) == LOW) {
+  if (currentTime - lastOkTime > DEBOUNCE_DELAY) {
+    // Decide what to do based on the currently visible item.
+    int actualIndex = selectedIndex + menuOffset;  // Map visible index to full array index.
+    if (actualIndex == 0) {
+      // "Attack" option
+      attackLoop();
+    } else if (actualIndex == 1) {
+      // "Scan" option
+      display.clearDisplay();
+      drawScanScreen();
+      if (scanNetworks() == 0) {
+        drawStatusBar("SCAN COMPLETE");
+        display.display();
+        delay(1000);
       }
-      lastOkTime = currentTime;
+    } else if (actualIndex == 2) {
+      // "Select" option
+      networkSelectionLoop();
+    } else if (actualIndex == 3) {
+      // "Sniff" option
+      startSniffing();
+    } else if (actualIndex == 4) {
+      // "Deauth + Sniff" option
+      deauthAndSniff();
+      /*
+        // Check if the selected network (SelectedSSID) is available on both bands
+        bool found24 = false, found5 = false;
+        for (size_t i = 0; i < scan_results.size(); i++) {
+          if (scan_results[i].ssid == SelectedSSID) {
+            if (scan_results[i].channel < 36)
+              found24 = true;
+            else
+              found5 = true;
+          }
+        }
+        if (found24 && found5) {
+          dualAttackAndSniff(SelectedSSID);
+        } else {
+          // Fall back to the original single frequency attack
+          deauthAndSniff();
+        }
+      */
+    } else if (actualIndex == 5) {
+      displayWebUIInfo();
+  
     }
+    lastOkTime = currentTime;
   }
+}
 
   // Handle BTN_DOWN
   if (digitalRead(BTN_UP) == LOW) {
