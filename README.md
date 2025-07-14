@@ -1,11 +1,11 @@
-# TITUS-OS  
+# TITUS OS  
 > > 5ghz deauther fir educational purposes
 
 ---
 
 ## 🚀 Built With
 
-TITUS-OS is built using modern tools and technologies for embedded Wi-Fi testing and management.
+TITUS OS is built using modern tools and technologies for embedded Wi-Fi testing and management.
 
 ---
 
@@ -22,7 +22,7 @@ TITUS-OS is built using modern tools and technologies for embedded Wi-Fi testing
 
 ## 🗂️ Overview
 
-**TITUS-OS** is an embedded firmware platform tailored for Wi-Fi network testing, security assessments, and device management on the **RTL8720DN**. It offers a suite of tools for custom Wi-Fi frame injection, real-time user interaction, and remote network data access — all within a flexible, easy-to-deploy system.
+**TITUS OS** is an embedded firmware platform tailored for Wi-Fi network testing, security assessments, and device management on the **RTL8720DN**. It offers a suite of tools for custom Wi-Fi frame injection, real-time user interaction, and remote network data access — all within a flexible, easy-to-deploy system.
 
 ### ⚡ Why TITUS-OS?
 
