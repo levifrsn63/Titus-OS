@@ -1,5 +1,5 @@
 # TITUS OS  
-> > 5ghz deauther fir educational purposes
+> 5ghz deauther fir educational purposes
 
 ---
 
