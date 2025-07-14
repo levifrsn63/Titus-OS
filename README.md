@@ -47,22 +47,14 @@ This project simplifies device configuration, enables advanced Wi-Fi testing, an
 ### ✅ Prerequisites
 
 This project requires the following dependencies:  
-- Programming Language: **Header** *(specify your main language here, e.g., C/C++, Arduino, etc.)*
-- Any additional tools you use
+- **Arduino IDE** (latest version recommended)  
+- Required Arduino libraries (listed in the source code)
 
 ---
 
 ### ⚙️ Installation
 
-Build TITUS-OS from source and install dependencies:
+1. **Clone the repository:**
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/levifrsn63/Titus-OS
-
-# 2. Navigate to the project directory
-cd Titus-OS
-
-# 3. Install the dependencies
-# (replace with your actual install command)
-echo 'INSERT-INSTALL-COMMAND-HERE'
+   ```bash
+   git clone https://github.com/levifrsn63/Titus-OS
