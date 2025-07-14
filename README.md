@@ -1,5 +1,5 @@
 # TITUS-OS  
-> Empowering Innovation Through Seamless Wireless Control
+> > 5ghz deauther fir educational purposes
 
 ---
 
