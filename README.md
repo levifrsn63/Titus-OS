@@ -1,11 +1,21 @@
 # TITUS OS  
-> 5ghz deauther for educational purposes
+> 5GHz deauther for educational purposes
 
 ---
 
 ## 🚀 Built With
 
 TITUS OS is built using modern tools and technologies for embedded Wi-Fi testing and management.
+
+---
+
+## 🔗 References
+
+This project is inspired by and builds upon ideas from related open-source projects:
+
+- [Cypher 5G Deauther](https://github.com/Nickguitar/cypher-5G-deauther)
+
+Feel free to explore these for additional context and complementary features!
 
 ---
 
@@ -24,13 +34,13 @@ TITUS OS is built using modern tools and technologies for embedded Wi-Fi testing
 
 **TITUS OS** is an embedded firmware platform tailored for Wi-Fi network testing, security assessments, and device management on the **RTL8720DN**. It offers a suite of tools for custom Wi-Fi frame injection, real-time user interaction, and remote network data access — all within a flexible, easy-to-deploy system.
 
-### ⚡ Why TITUS-OS?
+### ⚡ Why TITUS OS?
 
 This project simplifies device configuration, enables advanced Wi-Fi testing, and provides real-time feedback and remote data capture.
 
 **Core Features:**
 - 🛠️ **Firmware Setup & Configuration**  
-  Step-by-step guidance for deploying TITUS-OS on RTL8720DN devices.
+  Step-by-step guidance for deploying TITUS OS on RTL8720DN devices.
 - 🌐 **Custom Wi-Fi Frame Transmission**  
   Craft and send deauth, beacon, and management frames for network testing.
 - 📡 **Web Server & PCAP Capture**  
