@@ -1,8 +1,10 @@
 # TITUS OS  
-> 5GHz deauther for educational purposes
+
+5GHz deauther for educational purposes
+
+![Platform](https://img.shields.io/badge/Platform-BW16-blue)
 
 ---
-
 ## 🚀 Built With
 
 TITUS OS is built using modern tools and technologies for embedded Wi-Fi testing and management.
@@ -23,8 +25,8 @@ Feel free to explore these for additional context and complementary features!
 
 - [Overview](#overview)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 - [Usage](#usage)
 - [Testing](#testing)
 
