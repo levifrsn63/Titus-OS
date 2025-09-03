@@ -47,17 +47,13 @@ unsigned int spinnerIndex = 0;
 #define BATTERY_PIN PB3            // ADC pin connected to the resistor divider junction
 #define ADC_REF_VOLTAGE 3.3        // ADC reference voltage (in volts)
 #define ADC_MAX 1023.0             // Maximum ADC value for a 10-bit ADC
-const unsigned long BATTERY_MEASURE_INTERVAL = 5000; // 30 seconds (in milliseconds)
-unsigned long lastBatteryMeasure = 0;                 // Tracks the last time we measured
+const unsigned long BATTERY_MEASURE_INTERVAL = 5000; 
+unsigned long lastBatteryMeasure = 0;                 
 
-const float R1 = 68000.0;          // 68kΩ resistor (between battery positive and ADC node)
-const float R2 = 220000.0;         // 220kΩ resistor (between ADC node and ground)
-
-// Voltage divider factor to recover the battery voltage:
-// batteryVoltage = measuredVoltage * (R1 + R2) / R2
+const float R1 = 68000.0;         
+const float R2 = 220000.0;       
 const float voltageDividerFactor = (R1 + R2) / R2; // ≈ 1.3091
 
-// Battery voltage range for calculating percentage (adjust these as needed)
 const float batteryMinVoltage = 3.3; // Voltage at 0%
 const float batteryMaxVoltage = 3.8; // Voltage at 100%
 
