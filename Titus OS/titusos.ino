@@ -1,7 +1,6 @@
-// Global flag to indicate that the sniff callback has been triggered.
 volatile bool sniffCallbackTriggered = false;
 
-// Wifi
+//Wifi
 #include "wifi_conf.h"
 #include "wifi_cust_tx.h"
 #include "wifi_util.h"
@@ -13,7 +12,7 @@ volatile bool sniffCallbackTriggered = false;
 #include "debug.h"
 #include "vector"
 #include "map"
-// Misc
+//Misc
 #undef max
 #undef min
 #include <SPI.h>
@@ -51,7 +50,6 @@ unsigned int spinnerIndex = 0;
 const unsigned long BATTERY_MEASURE_INTERVAL = 5000; // 30 seconds (in milliseconds)
 unsigned long lastBatteryMeasure = 0;                 // Tracks the last time we measured
 
-// Resistor values (in ohms)
 const float R1 = 68000.0;          // 68kΩ resistor (between battery positive and ADC node)
 const float R2 = 220000.0;         // 220kΩ resistor (between ADC node and ground)
 
@@ -67,14 +65,13 @@ const float batteryMaxVoltage = 3.8; // Voltage at 100%
 float lastBatteryVoltage = 0.0;
 float lastBatteryPercentage = 0.0;
 
-// These globals control which items are visible.
 int menuOffset = 0;     // Either 0 or 1 in our case.
 int selectedIndex = 0;  // 0 to 2 (the visible slot index)
 
 bool webserverActive = false;
 int selectedNetworkIndex = 0;
 
-// VARIABLES
+
 typedef struct {
   String ssid;
   String bssid_str;
@@ -85,7 +82,7 @@ typedef struct {
 } WiFiScanResult;
 
 
-// Define a structure for storing handshake data.
+// structure for handshake data
 #define MAX_FRAME_SIZE 512
 #define MAX_HANDSHAKE_FRAMES 4
 #define MAX_MANAGEMENT_FRAMES 10
@@ -119,7 +116,7 @@ ManagementData capturedManagement;
 // Webserver
 #include "webserver.h"
 
-// Function to reset both handshake and management frame data.
+// reset handshake sctructure
 void resetCaptureData() {
   capturedHandshake.frameCount = 0;
   memset(capturedHandshake.frames, 0, sizeof(capturedHandshake.frames));
@@ -153,7 +150,7 @@ void displayWebUIInfo() {
   display.display();
 
   // Wait until OK is held
-  while (digitalRead(BTN_OK) == HIGH); // Wait for release (if held from before)
+  while (digitalRead(BTN_OK) == HIGH); 
 
   unsigned long pressStart = 0;
   while (true) {
@@ -171,14 +168,14 @@ void displayWebUIInfo() {
         break;
       }
     } else {
-      pressStart = 0;  // Reset if button released too soon
+      pressStart = 0;  
     }
   }
 }
 
 
 
-// Credentials for you Wifi network
+// Credentials
 char *ssid = "titus os";
 char *pass = "0123456789";
 
@@ -199,7 +196,7 @@ bool okstate = true;
 int scrollindex = 0;
 int perdeauth = 3;
 
-// timing variables
+// timing 
 unsigned long lastDownTime = 0;
 unsigned long lastUpTime = 0;
 unsigned long lastOkTime = 0;
@@ -365,7 +362,7 @@ void Becaon() {
   }
 }
 
-// Custom UI elements
+//UI elements
 void drawFrame() {
    display.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
 }
@@ -411,19 +408,16 @@ void drawMainMenu() {
     drawMenuItem(20 + (i * 15), mainMenuItems[itemIndex], (i == selectedIndex));
   }
 
-  // Draw scroll arrows on the right side.
+.
   int arrowX = SCREEN_WIDTH - 12;
-
-  // For the up arrow: if menuOffset > 0, there are items above.
+.
   if (menuOffset > 0) {
-    // If the first row (i.e. visible row index 0) is selected, draw arrow in BLACK.
+ CK.
     uint16_t upArrowColor = (selectedIndex == 0) ? BLACK : WHITE;
     display.fillTriangle(arrowX, 25, arrowX + 4, 20, arrowX + 8, 25, upArrowColor);
   }
 
-  // For the down arrow: if there are items below.
   if (menuOffset < TOTAL_MENU_ITEMS - 3) {
-    // If the bottom row (i.e. visible row index 2) is selected, use BLACK.
     uint16_t downArrowColor = (selectedIndex == 2) ? BLACK : WHITE;
     display.fillTriangle(arrowX, 55, arrowX + 4, 60, arrowX + 8, 55, downArrowColor);
   }
@@ -451,7 +445,7 @@ void drawScanScreen() {
   }
 }
 
-// Map RSSI (in dBm) to a number of bars (1 to 4).
+//rssi bar
 int getSignalBars(short rssi) {
   if (rssi >= -60)
     return 4;
@@ -464,8 +458,6 @@ int getSignalBars(short rssi) {
 }
 
 
-// draw a simple WiFi signal icon with 4 vertical bars
-// x,y specifies the top-left corner where the icon is drawn
 void drawSignalBars(int x, int y, int bars, uint16_t color) {
   const int barWidth = 2;
   const int gap = 1;
@@ -480,8 +472,6 @@ void drawSignalBars(int x, int y, int bars, uint16_t color) {
   }
 }
 
-
-// New function to draw the network list screen with 5 visible networks
 void drawNetworkList() {
   display.clearDisplay();
   
@@ -512,8 +502,6 @@ void drawNetworkList() {
     return;
   }
   
-  // ---- Calculate which networks to show ----
-  // 'scrollindex' now refers to the index within validIndices (0 to validIndices.size()-1)
   int selectedIndex = scrollindex;
   int firstVisible = selectedIndex - 2;
   if (firstVisible < 0) {
@@ -524,9 +512,9 @@ void drawNetworkList() {
     if (firstVisible < 0) firstVisible = 0;
   }
   
-  // ---- Draw 5 rows using a smaller vertical spacing ----
-  int startY = 16;     // starting Y position for the first network row
-  int lineHeight = 10; // smaller line height for a small screen
+  //Draw 5 rows 
+  int startY = 16;     
+  int lineHeight = 10; 
   
   for (int i = 0; i < 5; i++) {
     int idx = firstVisible + i;
@@ -708,7 +696,6 @@ void networkSelectionLoop() {
     }
   }
   
-  // The loop that lets the user scroll through validIndices remains unchanged...
   while (running) {
     drawNetworkList();
     
@@ -737,7 +724,7 @@ void networkSelectionLoop() {
     delay(50);
   }
   
-  // After user selects a network, store the actual index:
+  // After user selects anetwork, store the actual index:
   if (scrollindex < validIndices.size()) {
     selectedNetworkIndex = validIndices[scrollindex];
     SelectedSSID = scan_results[selectedNetworkIndex].ssid;
@@ -857,8 +844,7 @@ void printManagementData() {
 
 
 
-// Updated function to scan the entire packet for EAPOL EtherType (0x88 0x8E)
-// and print every instance it finds.
+// print every instance it finds.
 bool isEAPOLFrame(const unsigned char *packet, unsigned int length) {
   // Define the expected LLC+EAPOL sequence.
   const unsigned char eapol_sequence[] = {0xAA, 0xAA, 0x03, 0x00, 0x00, 0x00, 0x88, 0x8E};
@@ -883,7 +869,7 @@ bool isEAPOLFrame(const unsigned char *packet, unsigned int length) {
 }
 
 
-// Helper function: extract frame type and subtype from the first two bytes.
+
 void get_frame_type_subtype(const unsigned char *packet, unsigned int &type, unsigned int &subtype) {
   // Frame Control field is in the first two bytes (little endian)
   unsigned short fc = packet[0] | (packet[1] << 8);
@@ -891,8 +877,7 @@ void get_frame_type_subtype(const unsigned char *packet, unsigned int &type, uns
   subtype = (fc >> 4) & 0x0F;   // bits 4-7
 }
 
-// Helper function: returns the offset at which the EAPOL payload starts
-// Find the offset where the LLC+EAPOL signature starts.
+
 unsigned int findEAPOLPayloadOffset(const unsigned char *packet, unsigned int length) {
   const unsigned char eapol_signature[] = {0xAA, 0xAA, 0x03, 0x00, 0x00, 0x00, 0x88, 0x8E};
   const unsigned int sig_len = sizeof(eapol_signature);
@@ -909,7 +894,6 @@ unsigned int findEAPOLPayloadOffset(const unsigned char *packet, unsigned int le
   return 0; // if not found, return 0 (compare full frame)
 }
 
-// Extract the Sequence Control field (assumes 24-byte header; bytes 22-23).
 unsigned short getSequenceControl(const unsigned char *packet, unsigned int length) {
   if (length < 24) return 0;
   return packet[22] | (packet[23] << 8);
@@ -921,7 +905,7 @@ void rtl8720_sniff_callback(unsigned char *packet, unsigned int length, void* pa
   unsigned int type, subtype;
   get_frame_type_subtype(packet, type, subtype);
   
-  // --- Capture Management Frames (Beacons/Probe Responses) ---
+-
   if (type == 0) {  // Management
     if (subtype == 8 || subtype == 5) { // Beacon or Probe Response
       if (capturedManagement.frameCount < MAX_MANAGEMENT_FRAMES) {
@@ -959,9 +943,7 @@ void rtl8720_sniff_callback(unsigned char *packet, unsigned int length, void* pa
     newFrame.length = (length < MAX_FRAME_SIZE) ? length : MAX_FRAME_SIZE;
     memcpy(newFrame.data, packet, newFrame.length);
     
-    // Extract the sequence control from the MAC header.
-    unsigned short seqControl = getSequenceControl(newFrame.data, newFrame.length);
-    // And find the EAPOL payload offset.
+    unsigned short seqControl = getSequenceControl(newFrame.data, newFrame.length);.
     unsigned int payloadOffset = findEAPOLPayloadOffset(newFrame.data, newFrame.length);
     unsigned int newPayloadLength = (payloadOffset < newFrame.length) ? (newFrame.length - payloadOffset) : newFrame.length;
     
@@ -971,10 +953,9 @@ void rtl8720_sniff_callback(unsigned char *packet, unsigned int length, void* pa
       unsigned short storedSeq = getSequenceControl(stored->data, stored->length);
       unsigned int storedPayloadOffset = findEAPOLPayloadOffset(stored->data, stored->length);
       unsigned int storedPayloadLength = (storedPayloadOffset < stored->length) ? (stored->length - storedPayloadOffset) : stored->length;
-      
-      // First check: if sequence numbers differ, they are different frames.
+    .
       if (storedSeq == seqControl) {
-        // Now compare the payload portion.
+        //  compare the payload portion.
         if (storedPayloadLength == newPayloadLength &&
             memcmp(stored->data + storedPayloadOffset, newFrame.data + payloadOffset, newPayloadLength) == 0) {
           duplicate = true;
@@ -1006,13 +987,10 @@ void rtl8720_sniff_callback(unsigned char *packet, unsigned int length, void* pa
 
 
 
-// Function to enable promiscuous (sniffing) mode using RTL8720DN's API.
 void enableSniffing() {
   Serial.println("Enabling sniffing mode...");
   
-  // RTW_PROMISC_ENABLE_2 is used to enable promiscuous mode,
-  // rtl8720_sniff_callback is our callback function,
-  // and the third parameter (1) might specify additional options (e.g., channel filtering).
+.
   wifi_set_promisc(RTW_PROMISC_ENABLE_2, rtl8720_sniff_callback, 1);
   
   Serial.println("Sniffing mode enabled. Waiting for packets...");
@@ -1021,14 +999,13 @@ void enableSniffing() {
 // Function to disable promiscuous mode.
 void disableSniffing() {
   Serial.println("Disabling sniffing mode...");
-  // Passing NULL as callback and RTW_PROMISC_DISABLE constant (if defined)
+
   wifi_set_promisc(RTW_PROMISC_DISABLE, NULL, 1);
   Serial.println("Sniffing mode disabled.");
 }
 
-// Updated startSniffing function that uses enableSniffing() and disableSniffing()
 void startSniffing() {
-  // Clear display and show initial message.
+
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
@@ -1036,28 +1013,26 @@ void startSniffing() {
   display.println("Sniffing...");
   display.display();
 
-  // Reset capture buffers.
+
   resetCaptureData();
 
-  // Set the channel to that of the target AP.
+
   wext_set_channel(WLAN0_NAME, scan_results[scrollindex].channel);
   Serial.print("Switched to channel: ");
   Serial.println(scan_results[scrollindex].channel);
 
-  // Enable promiscuous mode.
+
   enableSniffing();
   
 
   
-  // Continue sniffing until we have 4 handshake frames and at least one management frame, or until timeout (if zero handshake frames).
   unsigned long sniffStart = millis();
-  const unsigned long timeout = 60000; // 60 seconds timeout
+  const unsigned long timeout = 60000; 
   bool cancelled = false;
   while ((capturedHandshake.frameCount < MAX_HANDSHAKE_FRAMES ||
           capturedManagement.frameCount == 0) &&
          (millis() - sniffStart) < timeout) {
-      
-      // Update the OLED display with the current handshake count and spinner animation.
+    
       display.clearDisplay();
       display.setTextSize(1);
       display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
@@ -1071,7 +1046,7 @@ void startSniffing() {
       display.print(SelectedSSID);
       
       
-      // Draw the spinner animation on the next line.
+//spinner anim
       display.setCursor(5, 45);
       display.print("Captured EAPOL: ");
       display.print(capturedHandshake.frameCount);
@@ -1079,10 +1054,9 @@ void startSniffing() {
       
       display.display();
       
-      spinnerIndex++; // Update spinner for next iteration.
+      spinnerIndex++; 
       delay(100);
 
-      // Allow user to cancel sniffing by pressing OK.
       if (digitalRead(BTN_OK) == LOW) {
           Serial.println("User canceled sniffing.");
           cancelled = true;
@@ -1090,10 +1064,10 @@ void startSniffing() {
       }
   }
   
-  // Disable promiscuous mode.
+ 
   disableSniffing();
   
-  // Final update: show final count and a prompt to go back.
+
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE, SSD1306_BLACK);
@@ -1109,7 +1083,6 @@ void startSniffing() {
   display.println("Press OK to return");
   display.display();
   
-  // Wait for the user to press the OK button (active low)
   while (digitalRead(BTN_OK) != LOW) {
     delay(10);
   }
@@ -1123,7 +1096,6 @@ void startSniffing() {
 
 
 
-// Simple base64 encoder function.
 String base64Encode(const uint8_t *data, size_t length) {
   const char* base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
   String encoded = "";
@@ -1147,7 +1119,6 @@ String base64Encode(const uint8_t *data, size_t length) {
 }
 
 
-// Function to generate the PCAP file, encode it in base64, and send to Serial.
 void sendPcapToSerial() {
   Serial.println("Generating PCAP file...");
   std::vector<uint8_t> pcapBuffer = generatePcapBuffer();
@@ -1162,7 +1133,8 @@ void sendPcapToSerial() {
   Serial.println("-----END PCAP BASE64-----");
 }
 
-// TODO: make it attack on both 2.4ghz and 5ghz at "the same time"
+
+// 5ghz and 2.4ghz
 void deauthAndSniffForNetwork(int netIndex) {
   Serial.print("Starting attack on ");
   Serial.print(scan_results[netIndex].ssid);
@@ -1173,24 +1145,19 @@ void deauthAndSniffForNetwork(int netIndex) {
   // Reset capture buffers.
   resetCaptureData();
 
-  // Use a local copy of the BSSID.
   uint8_t local_bssid[6];
   memcpy(local_bssid, scan_results[netIndex].bssid, 6);
 
-  // Set channel to the target AP's channel.
   wext_set_channel(WLAN0_NAME, scan_results[netIndex].channel);
   Serial.print("Switched to channel: ");
   Serial.println(scan_results[netIndex].channel);
 
-  // Overall timeout for the cycle.
   unsigned long overallStart = millis();
-  const unsigned long overallTimeout = 60000; // 60 seconds overall timeout
+  const unsigned long overallTimeout = 60000; 
 
-  // Phase durations.
-  const unsigned long deauthInterval = 6000; // deauth phase
-  const unsigned long sniffInterval = 5000;  // sniff phase
+  const unsigned long deauthInterval = 6000; 
+  const unsigned long sniffInterval = 5000;  
 
-  // Outer loop: alternate deauth and sniff until handshake is complete or timeout.
   while ((capturedHandshake.frameCount < MAX_HANDSHAKE_FRAMES ||
           capturedManagement.frameCount == 0) &&
          (millis() - overallStart < overallTimeout)) {
@@ -1215,7 +1182,6 @@ void deauthAndSniffForNetwork(int netIndex) {
     unsigned long sniffPhaseStart = millis();
     while (millis() - sniffPhaseStart < sniffInterval) {
       delay(100);
-      // If handshake is complete, exit early.
       if (capturedHandshake.frameCount >= MAX_HANDSHAKE_FRAMES &&
           capturedManagement.frameCount > 0) {
         break;
@@ -1223,7 +1189,6 @@ void deauthAndSniffForNetwork(int netIndex) {
     }
     disableSniffing();
 
-    // Check if handshake capture is complete.
     if (capturedHandshake.frameCount >= MAX_HANDSHAKE_FRAMES &&
         capturedManagement.frameCount > 0) {
       break;
@@ -1235,7 +1200,6 @@ void deauthAndSniffForNetwork(int netIndex) {
   Serial.print(" complete; handshake count: ");
   Serial.println(capturedHandshake.frameCount);
 
-  // Optionally, send the captured PCAP over Serial.
   if (capturedHandshake.frameCount >= MAX_HANDSHAKE_FRAMES &&
       capturedManagement.frameCount > 0) {
     printHandshakeData();
@@ -1253,7 +1217,6 @@ void dualAttackAndSniff(String targetSSID) {
 
   for (size_t i = 0; i < scan_results.size(); i++) {
     if (scan_results[i].ssid == targetSSID) {
-      // For simplicity, assume channel < 36 is 2.4GHz.
       if (scan_results[i].channel < 36) {
         candidates24.push_back(i);
       } else {
@@ -1261,19 +1224,14 @@ void dualAttackAndSniff(String targetSSID) {
       }
     }
   }
-
-  // If both bands are available:
   if (!candidates24.empty() && !candidates5.empty()) {
     Serial.println("Dual‑band detected. Running attack on both 2.4GHz and 5GHz.");
 
-    // Attack on 2.4 GHz.
     Serial.println("Starting attack on 2.4GHz network...");
     deauthAndSniffForNetwork(candidates24[0]);
-    // It’s important to reset capture data between attacks.
     resetCaptureData();
     delay(500);
 
-    // Attack on 5 GHz.
     Serial.println("Starting attack on 5GHz network...");
     deauthAndSniffForNetwork(candidates5[0]);
   } else {
@@ -1294,25 +1252,20 @@ void dualAttackAndSniff(String targetSSID) {
 
 
 void deauthAndSniff() {
-  // Reset capture buffers.
   resetCaptureData();
 
-  // Set the channel to the target AP's channel.
   wext_set_channel(WLAN0_NAME, scan_results[selectedNetworkIndex].channel);
   Serial.print("Switched to channel: ");
   Serial.println(scan_results[selectedNetworkIndex].channel);
 
-  // Overall timeout for the entire cycle.
   unsigned long overallStart = millis();
   const unsigned long overallTimeout = 60000; // 60 seconds overall timeout
 
-  // Phase durations.
   const unsigned long deauthInterval = 5000; // deauth phase (5 sec)
   const unsigned long sniffInterval = 4000;  // sniff phase (4 sec)
 
   bool cancelled = false;
 
-  // Function to check for a "long press" (held >500ms)
   auto checkForCancel = []() -> bool {
     if (digitalRead(BTN_OK) == LOW) {
       unsigned long pressStart = millis();
@@ -1470,7 +1423,6 @@ void deauthAndSniff() {
 }
 
 
-// Function to get the battery voltage (in volts)
 float getBatteryVoltage() {
   int rawADC = analogRead(BATTERY_PIN);                // Read ADC value from PB3
   float pinVoltage = (rawADC / ADC_MAX) * ADC_REF_VOLTAGE; // Convert ADC reading to voltage at the divider node
@@ -1478,7 +1430,6 @@ float getBatteryVoltage() {
   return batteryVoltage;
 }
 
-// Function to calculate battery percentage based on the voltage
 float getBatteryPercentage() {
   float voltage = getBatteryVoltage();
   float percentage = (voltage - batteryMinVoltage) / (batteryMaxVoltage - batteryMinVoltage) * 100.0;
@@ -1503,13 +1454,10 @@ void loop() {
 // Check if the OK (select) button was pressed.
 if (digitalRead(BTN_OK) == LOW) {
   if (currentTime - lastOkTime > DEBOUNCE_DELAY) {
-    // Decide what to do based on the currently visible item.
     int actualIndex = selectedIndex + menuOffset;  // Map visible index to full array index.
     if (actualIndex == 0) {
-      // "Attack" option
       attackLoop();
     } else if (actualIndex == 1) {
-      // "Scan" option
       display.clearDisplay();
       drawScanScreen();
       if (scanNetworks() == 0) {
@@ -1518,31 +1466,12 @@ if (digitalRead(BTN_OK) == LOW) {
         delay(1000);
       }
     } else if (actualIndex == 2) {
-      // "Select" option
       networkSelectionLoop();
     } else if (actualIndex == 3) {
-      // "Sniff" option
       startSniffing();
     } else if (actualIndex == 4) {
-      // "Deauth + Sniff" option
       deauthAndSniff();
-      /*
-        // Check if the selected network (SelectedSSID) is available on both bands
-        bool found24 = false, found5 = false;
-        for (size_t i = 0; i < scan_results.size(); i++) {
-          if (scan_results[i].ssid == SelectedSSID) {
-            if (scan_results[i].channel < 36)
-              found24 = true;
-            else
-              found5 = true;
-          }
-        }
-        if (found24 && found5) {
-          dualAttackAndSniff(SelectedSSID);
-        } else {
-          // Fall back to the original single frequency attack
-          deauthAndSniff();
-        }
+
       */
     } else if (actualIndex == 5) {
       displayWebUIInfo();
@@ -1555,20 +1484,17 @@ if (digitalRead(BTN_OK) == LOW) {
   // Handle BTN_DOWN
   if (digitalRead(BTN_UP) == LOW) {
     if (currentTime - lastDownTime > DEBOUNCE_DELAY) {
-      // If the select button is held, we adjust the menu offset.
       if (digitalRead(BTN_OK) == LOW) {
-        // If not at the bottom page yet, scroll down.
         if (menuOffset < TOTAL_MENU_ITEMS - 3) {
           menuOffset++;
-          // Optionally, set selectedIndex to the middle (or leave as is)
-          selectedIndex = 0;  // Reset visible selection
+          selectedIndex = 0;  
         }
       } else {
-        // Normal navigation: move the selection down.
+    
         if (selectedIndex < 2) {
           selectedIndex++;
         } else if (menuOffset < TOTAL_MENU_ITEMS - 3) {
-          // If at the bottom of the visible list, scroll down.
+          
           menuOffset++;
         }
       }
@@ -1580,13 +1506,12 @@ if (digitalRead(BTN_OK) == LOW) {
   if (digitalRead(BTN_DOWN) == LOW) {
     if (currentTime - lastUpTime > DEBOUNCE_DELAY) {
       if (digitalRead(BTN_OK) == LOW) {
-        // With select pressed, scroll upward if possible.
+
         if (menuOffset > 0) {
           menuOffset--;
-          selectedIndex = 0;  // or keep the same relative index
+          selectedIndex = 0;  
         }
       } else {
-        // Normal navigation: move selection up.
         if (selectedIndex > 0) {
           selectedIndex--;
         } else if (menuOffset > 0) {
